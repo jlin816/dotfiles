@@ -13,9 +13,7 @@ Plugin 'rking/ag.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'tpope/vim-surround'
 Plugin 'craigemery/vim-autotag'
-Plugin 'lervag/vimtex'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'Valloric/MatchTagAlways'
+Plugin 'w0rp/ale'
 
 " Copy paste keymappings
 vmap <C-c> "+y
@@ -57,12 +55,14 @@ nnoremap <C-H> <C-W><C-H>
 
 " Real tabs for makefiles
 autocmd FileType make setlocal noexpandtab
-
+" HTML formatting
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
 " Recognize .md as markdown files (mainly for vim-instant-markdown plugin)
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
 " Weird backspace key issue
 set backspace=indent,eol,start
 
-" Allow copy/pase
-set clipboard=unnamed
+" jk
+inoremap jk <Esc>
