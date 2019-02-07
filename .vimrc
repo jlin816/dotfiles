@@ -14,6 +14,10 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'tpope/vim-surround'
 Plugin 'craigemery/vim-autotag'
 Plugin 'w0rp/ale'
+Plugin 'kaicataldo/material.vim'
+Plugin 'xuhdev/vim-latex-live-preview'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
 
 " Copy paste keymappings
 vmap <C-c> "+y
@@ -28,9 +32,9 @@ filetype plugin indent on    " required
 syntax on
 set number
 set history=1000
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 set autoindent
 set fileformat=unix
@@ -66,3 +70,12 @@ set backspace=indent,eol,start
 
 " jk
 inoremap jk <Esc>
+
+" Color shit
+set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+" vim-latex-live-preview setup
+autocmd Filetype tex setl updatetime=1
+let g:livepreview_previewer = 'open -a Preview'

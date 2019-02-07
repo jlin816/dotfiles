@@ -105,3 +105,18 @@ export PATH="$PATH:/usr/local/lib/python3.6/site-packages"
 export CUDA_VISIBLE_DEVICES=''
 export PATH="/usr/local/opt/mongodb@3.4/bin:$PATH"
 alias config='/usr/bin/git --git-dir=/Users/jessy/.cfg/ --work-tree=/Users/jessy'
+
+# Fix colors
+export TERM='xterm-256color'
+
+# Partial completion
+zstyle ':completion:*' completer _complete
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
+autoload -Uz compinit
+compinit
+
+# Move one word fwd or bwd
+bindkey "[D" backward-word
+bindkey "[C" forward-word
+bindkey "^[a" beginning-of-line
+bindkey "^[e" end-of-line
