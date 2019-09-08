@@ -81,21 +81,23 @@ function omjupy() {
 }
 
 # load virtualenvwrapper for python (after custom PATHs)
- venvwrap="virtualenvwrapper.sh"
- /usr/bin/which -s $venvwrap
- if [ $? -eq 0 ]; then
-     venvwrap=`/usr/bin/which $venvwrap`
-     source $venvwrap
-fi
+# venvwrap="virtualenvwrapper.sh"
+# /usr/bin/which -s $venvwrap
+# if [ $? -eq 0 ]; then
+#     venvwrap=`/usr/bin/which $venvwrap`
+#     source $venvwrap
+#fi
 
 alias ctagsi="ctags -R -f tags ."
 
 export NVM_DIR="/Users/jessy/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3.5
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3.7
 export VIRTUALENVWRAPPER_VIRTUALENV=/Library/Frameworks/Python.framework/Versions/3.5/bin/virtualenv
-source /Library/Frameworks/Python.framework/Versions/3.5/bin/virtualenvwrapper.sh
+#source /Library/Frameworks/Python.framework/Versions/3.5/bin/virtualenvwrapper.sh
+source /usr/local/bin/virtualenvwrapper.sh
+
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Add to path
@@ -120,3 +122,8 @@ bindkey "[D" backward-word
 bindkey "[C" forward-word
 bindkey "^[a" beginning-of-line
 bindkey "^[e" end-of-line
+
+alias python=python3
+
+source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=6"
