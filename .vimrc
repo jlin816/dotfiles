@@ -12,14 +12,15 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'rking/ag.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'tpope/vim-surround'
-Plugin 'craigemery/vim-autotag'
 Plugin 'w0rp/ale'
 Plugin 'kaicataldo/material.vim'
 Plugin 'xuhdev/vim-latex-live-preview'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'davidhalter/jedi-vim'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'VonHeikemen/midnight-owl.vim'
+Plugin 'preservim/nerdcommenter'
 
 " Copy paste keymappings
 vmap <C-c> "+y
@@ -31,7 +32,7 @@ imap <C-v> <ESC>"+pa
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-syntax on
+syntax enable
 set number
 set history=1000
 set tabstop=2
@@ -41,7 +42,8 @@ set expandtab
 set autoindent
 set fileformat=unix
 set t_Co=256
-colorscheme OceanicNext
+" colorscheme OceanicNext
+colorscheme midnight-owl
 set background=dark
 let g:airline_theme='oceanicnext'
 set mouse=a
@@ -54,10 +56,10 @@ map <S-Right> :tabn<CR>
 map <S-Left>  :tabp<CR>
 
 " Easier split nav
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+noremap <C-J> <C-W><C-J>
+noremap <C-K> <C-W><C-K>
+noremap <C-L> <C-W><C-L>
+noremap <C-H> <C-W><C-H>
 
 " Real tabs for makefiles
 autocmd FileType make setlocal noexpandtab
