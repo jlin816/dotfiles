@@ -1,0 +1,13 @@
+.DS_Store
+.env
+.flaskenv
+*.pyc
+*.pyo
+env/
+env*
+dist/
+build/
+*.egg
+*.egg-info/
+.cache/
+.pytest_cache/
