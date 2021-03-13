@@ -127,3 +127,8 @@ alias python=python3
 
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=6"
+
+# sublime
+alias sublime="open -a /Applications/Sublime\ Text.app"
+
+

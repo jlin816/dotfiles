@@ -103,3 +103,9 @@ let g:ale_lint_on_enter = 0
 "    autocmd!
 "    autocmd VimEnter * call FuckThatMatchParen()
 " augroup END
+
+" Always just save lol
+command WQ wq
+command Wq wq
+command W w
+command Q q
