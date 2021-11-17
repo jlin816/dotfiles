@@ -109,3 +109,13 @@ command WQ wq
 command Wq wq
 command W w
 command Q q
+
+" Folds
+set foldmethod=indent
+set foldnestmax=10
+set nofoldenable
+set foldlevel=2
+
+" pdb shortcut
+map ,p oimport pdb; pdb.set_trace()<ESC>:w<cr>
+
