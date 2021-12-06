@@ -119,3 +119,6 @@ set foldlevel=2
 " pdb shortcut
 map ,p oimport pdb; pdb.set_trace()<ESC>:w<cr>
 
+" Look for tags recursively
+set tags=tags;/
+
