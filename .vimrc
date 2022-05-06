@@ -8,19 +8,17 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'scrooloose/nerdtree'
 Plugin 'mhartington/oceanic-next'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'rking/ag.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'tpope/vim-surround'
-Plugin 'w0rp/ale'
 Plugin 'kaicataldo/material.vim'
-Plugin 'xuhdev/vim-latex-live-preview'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
-Plugin 'davidhalter/jedi-vim'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'VonHeikemen/midnight-owl.vim'
 Plugin 'preservim/nerdcommenter'
+Plugin 'dense-analysis/ale'
+Plugin 'github/copilot.vim'
 
 " Copy paste keymappings
 vmap <C-c> "+y
@@ -119,6 +117,118 @@ set foldlevel=2
 " pdb shortcut
 map ,p oimport pdb; pdb.set_trace()<ESC>:w<cr>
 
-" Look for tags recursively
-set tags=tags;/
+" Config for fzf
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+" {{
+    " Show error if ag is unavailable and should be installed
+    function! AgMissingStatus()
+        if !executable('ag')
+            return '[missing ag]'
+        endif
+        return ''
+    endfunction
 
+    if !executable('ag')
+        let $FZF_DEFAULT_COMMAND='find .'
+    else
+        " Configure ag
+        function! s:update_fzf_with_wildignore()
+            let s:fzf_ignore_options = ' '.join(map(split(&wildignore, ','), '"--ignore \"" . v:val . "\""'))
+            if executable('ag')
+                let $FZF_DEFAULT_COMMAND='ag --hidden ' . s:fzf_ignore_options . ' -g ""'
+            endif
+        endfunction
+
+        augroup ConfigureFzf
+            autocmd!
+            " Configure fzf after wildignore is set later in vimrc
+            autocmd VimEnter * call s:update_fzf_with_wildignore()
+        augroup END
+
+        " Call Ag relative to repository root
+        command! -bang -nargs=* Ag
+            \ call fzf#vim#ag(<q-args>, '--hidden ' . s:fzf_ignore_options, fzf#vim#with_preview({
+            \     'dir': b:repo_file_search_root
+            \ }), <bang>0)
+
+        " Using grep for visual mode selection
+        function! s:GrepVisual(type)
+            " Save the contents of the unnamed register
+            let l:save_tmp = @@
+
+            " Copy visual selection into unnamed_register
+            if a:type ==# 'v'
+                normal! `<v`>y
+            elseif a:type ==# 'char'
+                normal! `[v`]y
+            else
+                return
+            endif
+
+            execute 'Ag ' @@
+
+            " Restore the unnamed register
+            let @@ = l:save_tmp
+        endfunction
+    endif
+
+    function! s:smarter_fuzzy_file_search()
+        execute 'Files ' . b:repo_file_search_root
+    endfunction
+
+    " Helpers for using &wildignore with fzf
+    let s:fzf_ignore_options = ''
+
+    " We want to use gutentags for tag generation
+    let g:fzf_tags_command = ''
+
+    " Bindings: search file names
+    nnoremap <C-P> :call <SID>smarter_fuzzy_file_search()<CR>
+    nnoremap <Leader>p :Buffers<CR>
+    nnoremap <Leader>ph :Files<CR>
+    nnoremap <Leader>h :History<CR>
+    nnoremap <Leader>gf :call fzf#vim#files(b:repo_file_search_root, fzf#vim#with_preview({
+        \ 'options': '--query ' . shellescape(expand('<cfile>'))}))<CR>
+
+    " Bindings: search tags
+    nnoremap <Leader>t :Tags<CR>
+    nnoremap <Leader>gt :execute 'Tags ' . expand('<cword>')<CR>
+
+    " Bindings: search lines in open buffers
+    nnoremap <Leader>l :Lines<CR>
+    nnoremap <Leader>gl :call fzf#vim#lines(expand('<cword>'))<CR>
+
+    " Bindings: search lines in files with ag
+    nnoremap <Leader>a :Ag<CR>
+    vnoremap <Leader>a :<C-U>call <SID>GrepVisual(visualmode())<CR>
+    nnoremap <Leader>ga :execute 'Ag ' . expand('<cword>')<CR>
+
+    " Use Vim colors for fzf
+    let g:fzf_layout = {
+        \ 'window': 'new'
+        \ }
+" }}
+let g:fzf_layout = { 'down': '25%' }
+let g:fzf_action = {
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-v': 'vsplit'
+      \ }
+let g:fzf_preview_window = 'right:60%'
+nnoremap <c-p> :FZF<cr>
+fun! s:fzf_root()
+	let path = finddir(".git", expand("%:p:h").";")
+	return fnamemodify(substitute(path, ".git", "", ""), ":p:h")
+endfun
+
+nnoremap <silent> <Leader>ff :exe 'Files ' . <SID>fzf_root()<CR>
+
+" Indent vertical indicators
+Plugin 'Yggdroot/indentLine'
+
+" Auto-wrap arguments
+Plugin 'FooSoft/vim-argwrap'
+noremap <silent> gw :ArgWrap<CR>
+
+" Better indenting for python
+Plugin 'Vimjas/vim-python-pep8-indent'
