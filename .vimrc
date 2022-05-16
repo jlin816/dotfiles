@@ -232,3 +232,60 @@ noremap <silent> gw :ArgWrap<CR>
 
 " Better indenting for python
 Plugin 'Vimjas/vim-python-pep8-indent'
+
+" LSP
+Plugin 'prabirshrestha/vim-lsp'
+Plugin 'mattn/vim-lsp-settings'
+
+" {{
+    " Global LSP config
+    function! s:on_lsp_buffer_enabled() abort
+        setlocal omnifunc=lsp#complete
+        if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+        nmap <buffer> <Leader>gd <plug>(lsp-definition)
+        nmap <buffer> <Leader>gr <plug>(lsp-references)
+        nmap <buffer> <Leader>gi <plug>(lsp-implementation)
+        " This conflicts with an fzf binding
+        "" nmap <buffer> <Leader>gt <plug>(lsp-type-definition)
+        nmap <buffer> <Leader>rn <plug>(lsp-rename)
+        nmap <buffer> <Leader>[g <Plug>(lsp-previous-diagnostic)
+        nmap <buffer> <Leader>]g <Plug>(lsp-next-diagnostic)
+        nmap <buffer> K <plug>(lsp-hover)
+    endfunction
+
+    " Call s:on_lsp_buffer_enabled only for languages with registered
+    " servers
+    augroup lsp_install
+        autocmd!
+        autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+    augroup END
+
+    " Make colors a bit less distracting
+    augroup LspColors
+        autocmd!
+
+        function! s:SetLspColors()
+            highlight LspErrorText ctermfg=red ctermbg=NONE
+            highlight LspErrorHighlight ctermbg=236
+
+            highlight LspWarningText ctermfg=yellow ctermbg=NONE
+            highlight LspWarningHighlight ctermbg=236
+
+            highlight LspHintText ctermfg=blue ctermbg=NONE
+            highlight LspHintHighlight ctermbg=236
+
+            highlight LspErrorVirtualText ctermfg=238
+            highlight LspWarningVirtualText ctermfg=238
+            highlight LspInformationVirtualText ctermfg=238
+            highlight LspHintVirtualText ctermfg=238
+        endfunction
+
+        autocmd ColorScheme * call s:SetLspColors()
+    augroup END
+
+    " No diagnostics
+    let g:lsp_diagnostics_enabled = 0
+
+    " Show error messages below statusbar
+    let g:lsp_diagnostics_echo_cursor = 1
+" }}
