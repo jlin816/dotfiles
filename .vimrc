@@ -5,31 +5,34 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
+" Themes
+Plugin 'mhartington/oceanic-next'
+Plugin 'VonHeikemen/midnight-owl.vim'
+" Core
 Plugin 'vim-airline/vim-airline'
 Plugin 'scrooloose/nerdtree'
-Plugin 'mhartington/oceanic-next'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'rking/ag.vim'
 Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'github/copilot.vim'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+" Utils
 Plugin 'tpope/vim-surround'
-Plugin 'kaicataldo/material.vim'
+"" Commenting shortcuts
+Plugin 'preservim/nerdcommenter'
+"" Indent vertical indicators
+Plugin 'Yggdroot/indentLine'
+" Filetypes
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'leafgarland/typescript-vim'
-Plugin 'VonHeikemen/midnight-owl.vim'
-Plugin 'preservim/nerdcommenter'
-Plugin 'dense-analysis/ale'
-Plugin 'github/copilot.vim'
+Plugin 'ap/vim-css-color'
+Plugin 'Vimjas/vim-python-pep8-indent'
 
-" Copy paste keymappings
-vmap <C-c> "+y
-vmap <C-x> "+c
-vmap <C-v> c<ESC>"+p
-imap <C-v> <ESC>"+pa
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Core
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 syntax enable
 set number
 set history=1000
@@ -46,26 +49,11 @@ set background=dark
 let g:airline_theme='oceanicnext'
 set mouse=a
 
-" Open NERDTree using Shift Tab
-map <S-Tab> :NERDTreeToggle<CR>
-
-" Shift between tabs using Shift Right, Shift Left
-map <S-Right> :tabn<CR>
-map <S-Left>  :tabp<CR>
-
 " Easier split nav
 noremap <C-J> <C-W><C-J>
 noremap <C-K> <C-W><C-K>
 noremap <C-L> <C-W><C-L>
 noremap <C-H> <C-W><C-H>
-
-" Real tabs for makefiles
-autocmd FileType make setlocal noexpandtab
-" HTML formatting
-autocmd FileType html setlocal shiftwidth=2 tabstop=2
-autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
-" Recognize .md as markdown files (mainly for vim-instant-markdown plugin)
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
 " Weird backspace key issue
 set backspace=indent,eol,start
@@ -77,30 +65,6 @@ inoremap jk <Esc>
 set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-
-" vim-latex-live-preview setup
-autocmd Filetype tex setl updatetime=1
-let g:livepreview_previewer = 'open -a Preview'
-
-" Ale lag
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = 0
-
-" Disable parentheses matching depends on system. This way we should address all cases (?)
-" set noshowmatch
-
-" NoMatchParen " This doesnt work as it belongs to a plugin, which is only loaded _after_ all files are.
-" Trying disable MatchParen after loading all plugins
-"
-" function! g:FuckThatMatchParen ()
-"    if exists(":NoMatchParen")
-"        :NoMatchParen
-"    endif
-" endfunction
-" augroup plugin_initialize
-"    autocmd!
-"    autocmd VimEnter * call FuckThatMatchParen()
-" augroup END
 
 " Always just save lol
 command WQ wq
@@ -117,175 +81,70 @@ set foldlevel=2
 " pdb shortcut
 map ,p oimport pdb; pdb.set_trace()<ESC>:w<cr>
 
-" Config for fzf
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
-" {{
-    " Show error if ag is unavailable and should be installed
-    function! AgMissingStatus()
-        if !executable('ag')
-            return '[missing ag]'
-        endif
-        return ''
-    endfunction
+" Look for tags recursively
+set tags=tags;/
 
-    if !executable('ag')
-        let $FZF_DEFAULT_COMMAND='find .'
-    else
-        " Configure ag
-        function! s:update_fzf_with_wildignore()
-            let s:fzf_ignore_options = ' '.join(map(split(&wildignore, ','), '"--ignore \"" . v:val . "\""'))
-            if executable('ag')
-                let $FZF_DEFAULT_COMMAND='ag --hidden ' . s:fzf_ignore_options . ' -g ""'
-            endif
-        endfunction
+" Remove trailing whitespace on save for most file types.
+let allowTrailingSpaces = ['snippets']
+autocmd BufWritePre * if index(allowTrailingSpaces, &ft) < 0 | %s/\s\+$//e
 
-        augroup ConfigureFzf
-            autocmd!
-            " Configure fzf after wildignore is set later in vimrc
-            autocmd VimEnter * call s:update_fzf_with_wildignore()
-        augroup END
 
-        " Call Ag relative to repository root
-        command! -bang -nargs=* Ag
-            \ call fzf#vim#ag(<q-args>, '--hidden ' . s:fzf_ignore_options, fzf#vim#with_preview({
-            \     'dir': b:repo_file_search_root
-            \ }), <bang>0)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" scrooloose/nerdtree
+" Open NERDTree using Shift Tab
+map <S-Tab> :NERDTreeToggle<CR>
 
-        " Using grep for visual mode selection
-        function! s:GrepVisual(type)
-            " Save the contents of the unnamed register
-            let l:save_tmp = @@
 
-            " Copy visual selection into unnamed_register
-            if a:type ==# 'v'
-                normal! `<v`>y
-            elseif a:type ==# 'char'
-                normal! `[v`]y
-            else
-                return
-            endif
 
-            execute 'Ag ' @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Filetype settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Makefiles
+autocmd FileType make setlocal noexpandtab
 
-            " Restore the unnamed register
-            let @@ = l:save_tmp
-        endfunction
-    endif
+" HTML
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
 
-    function! s:smarter_fuzzy_file_search()
-        execute 'Files ' . b:repo_file_search_root
-    endfunction
+" Recognize .md as markdown files (mainly for vim-instant-markdown plugin)
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
-    " Helpers for using &wildignore with fzf
-    let s:fzf_ignore_options = ''
+" vim-latex-live-preview setup
+autocmd Filetype tex setl updatetime=1
+let g:livepreview_previewer = 'open -a Preview'
 
-    " We want to use gutentags for tag generation
-    let g:fzf_tags_command = ''
+" Ale lag
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_enter = 0
 
-    " Bindings: search file names
-    nnoremap <C-P> :call <SID>smarter_fuzzy_file_search()<CR>
-    nnoremap <Leader>p :Buffers<CR>
-    nnoremap <Leader>ph :Files<CR>
-    nnoremap <Leader>h :History<CR>
-    nnoremap <Leader>gf :call fzf#vim#files(b:repo_file_search_root, fzf#vim#with_preview({
-        \ 'options': '--query ' . shellescape(expand('<cfile>'))}))<CR>
 
-    " Bindings: search tags
-    nnoremap <Leader>t :Tags<CR>
-    nnoremap <Leader>gt :execute 'Tags ' . expand('<cword>')<CR>
+" Indenting for python
+function! PythonSyntax()
+  syntax match MyPythonSelf "\<self\>\.\?"
+  syntax match MyPythonLibrary "\<np\.\|\<tf\.\|\<scipy\.\<os\."
+  syntax match MyPythonKwarg "\((\| \)\@<=\<[A-Za-z0-9_]\+\>="
+  syntax match MyPythonNumber "\<[0-9.]\+\>\.\?"
+  hi MyPythonSelf    cterm=none ctermfg=gray ctermbg=none
+  hi MyPythonLibrary cterm=none ctermfg=gray ctermbg=none
+  hi MyPythonKwarg   cterm=none ctermfg=magenta ctermbg=none
+  hi MyPythonNumber  cterm=none ctermfg=red ctermbg=none
+endfunction
+"autocmd FileType python setlocal ts=2 sw=2 sts=2
+autocmd FileType python setlocal ts=4 sw=4 sts=4
+autocmd FileType python setlocal tw=79
+autocmd FileType python call PythonSyntax()
 
-    " Bindings: search lines in open buffers
-    nnoremap <Leader>l :Lines<CR>
-    nnoremap <Leader>gl :call fzf#vim#lines(expand('<cword>'))<CR>
 
-    " Bindings: search lines in files with ag
-    nnoremap <Leader>a :Ag<CR>
-    vnoremap <Leader>a :<C-U>call <SID>GrepVisual(visualmode())<CR>
-    nnoremap <Leader>ga :execute 'Ag ' . expand('<cword>')<CR>
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Utils
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Shortcuts
+" cd to directory of current file and print
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
-    " Use Vim colors for fzf
-    let g:fzf_layout = {
-        \ 'window': 'new'
-        \ }
-" }}
-let g:fzf_layout = { 'down': '25%' }
-let g:fzf_action = {
-      \ 'ctrl-s': 'split',
-      \ 'ctrl-v': 'vsplit'
-      \ }
-let g:fzf_preview_window = 'right:60%'
-nnoremap <c-p> :FZF<cr>
-fun! s:fzf_root()
-	let path = finddir(".git", expand("%:p:h").";")
-	return fnamemodify(substitute(path, ".git", "", ""), ":p:h")
-endfun
 
-nnoremap <silent> <Leader>ff :exe 'Files ' . <SID>fzf_root()<CR>
-
-" Indent vertical indicators
-Plugin 'Yggdroot/indentLine'
-
-" Auto-wrap arguments
-Plugin 'FooSoft/vim-argwrap'
-noremap <silent> gw :ArgWrap<CR>
-
-" Better indenting for python
-Plugin 'Vimjas/vim-python-pep8-indent'
-
-" LSP
-Plugin 'prabirshrestha/vim-lsp'
-Plugin 'mattn/vim-lsp-settings'
-
-" {{
-    " Global LSP config
-    function! s:on_lsp_buffer_enabled() abort
-        setlocal omnifunc=lsp#complete
-        if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-        nmap <buffer> <Leader>gd <plug>(lsp-definition)
-        nmap <buffer> <Leader>gr <plug>(lsp-references)
-        nmap <buffer> <Leader>gi <plug>(lsp-implementation)
-        " This conflicts with an fzf binding
-        "" nmap <buffer> <Leader>gt <plug>(lsp-type-definition)
-        nmap <buffer> <Leader>rn <plug>(lsp-rename)
-        nmap <buffer> <Leader>[g <Plug>(lsp-previous-diagnostic)
-        nmap <buffer> <Leader>]g <Plug>(lsp-next-diagnostic)
-        nmap <buffer> K <plug>(lsp-hover)
-    endfunction
-
-    " Call s:on_lsp_buffer_enabled only for languages with registered
-    " servers
-    augroup lsp_install
-        autocmd!
-        autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-    augroup END
-
-    " Make colors a bit less distracting
-    augroup LspColors
-        autocmd!
-
-        function! s:SetLspColors()
-            highlight LspErrorText ctermfg=red ctermbg=NONE
-            highlight LspErrorHighlight ctermbg=236
-
-            highlight LspWarningText ctermfg=yellow ctermbg=NONE
-            highlight LspWarningHighlight ctermbg=236
-
-            highlight LspHintText ctermfg=blue ctermbg=NONE
-            highlight LspHintHighlight ctermbg=236
-
-            highlight LspErrorVirtualText ctermfg=238
-            highlight LspWarningVirtualText ctermfg=238
-            highlight LspInformationVirtualText ctermfg=238
-            highlight LspHintVirtualText ctermfg=238
-        endfunction
-
-        autocmd ColorScheme * call s:SetLspColors()
-    augroup END
-
-    " No diagnostics
-    let g:lsp_diagnostics_enabled = 0
-
-    " Show error messages below statusbar
-    let g:lsp_diagnostics_echo_cursor = 1
-" }}
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
