@@ -8,6 +8,8 @@ Plugin 'VundleVim/Vundle.vim'
 " Themes
 Plugin 'mhartington/oceanic-next'
 Plugin 'VonHeikemen/midnight-owl.vim'
+Plugin 'oxfist/night-owl.nvim'
+Plugin 'ayu-theme/ayu-vim'
 " Core
 Plugin 'vim-airline/vim-airline'
 Plugin 'scrooloose/nerdtree'
@@ -43,8 +45,8 @@ set expandtab
 set autoindent
 set fileformat=unix
 set t_Co=256
-" colorscheme OceanicNext
-colorscheme midnight-owl
+let ayucolor="dark"
+colorscheme ayu
 set background=dark
 let g:airline_theme='oceanicnext'
 set mouse=a
@@ -65,6 +67,8 @@ inoremap jk <Esc>
 set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+" For Neovim 0.1.3 and 0.1.4
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 " Always just save lol
 command WQ wq
