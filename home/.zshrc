@@ -73,12 +73,6 @@ ZSH_THEME=""
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
-# Pure prompt
-fpath+=$HOME/.zsh/pure
-autoload -U promptinit; promptinit
-zstyle ':prompt:pure:path' color red
-prompt pure
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -105,6 +99,15 @@ prompt pure
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
+
+# Prompt theme
+fpath+=$HOME/.zsh/pure
+autoload -U promptinit; promptinit
+PURE_PROMPT_SYMBOL='➜'
+zstyle ':prompt:pure:path' color red
+prompt pure
+
+
 # Plugins
 export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
@@ -138,3 +141,32 @@ export CLICOLOR=1
 export TERM=xterm-256color
 
 
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/jessy/.miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/jessy/.miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/jessy/.miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/jessy/.miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+obsd=~/Documents/main
+
+# Git.
+alias gs='git status'
+alias gl='git log'
+alias ga='git add -A'
+alias gc='git commit -m '
+alias gd='git diff HEAD'
+alias gdc='git diff --cached'
+function gr() { git rebase -i HEAD~$1 }
+
+# Python.
+alias py='python3'
