@@ -10,7 +10,7 @@ Plugin 'mhartington/oceanic-next'
 Plugin 'VonHeikemen/midnight-owl.vim'
 Plugin 'ayu-theme/ayu-vim'
 " Core
-Plugin 'vim-airline/vim-airline'
+" Plugin 'vim-airline/vim-airline'
 Plugin 'scrooloose/nerdtree'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'github/copilot.vim'
@@ -36,6 +36,9 @@ Plugin 'DingDean/wgsl.vim'
 Plugin 'prabirshrestha/vim-lsp'
 Plugin 'mattn/vim-lsp-settings'
 
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Core
@@ -179,6 +182,7 @@ function! PythonSyntax()
   hi MyPythonKwarg   cterm=none ctermfg=magenta ctermbg=none
   hi MyPythonNumber  cterm=none ctermfg=red ctermbg=none
 endfunction
+autocmd FileType python setlocal ts=2 sw=2 sts=2
 autocmd FileType python setlocal tw=79
 autocmd FileType python call PythonSyntax()
 
@@ -208,8 +212,9 @@ vnoremap <c-v> <esc>
 vnoremap u <nop>
 vnoremap <c-u> u
 
+" Hide highlights.
+nnoremap <silent> <c-c> :noh<cr>
+
 """"""
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+

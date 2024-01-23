@@ -170,3 +170,10 @@ function gr() { git rebase -i HEAD~$1 }
 
 # Python.
 alias py='python3'
+
+# Upload/download files from server.
+function dl() { scp -r jessy@${1}:/home/jessy/projects/${2} ~/Downloads/ && open ~/Downloads/$(basename ${2}) }
+function dlf() { scp -r jessy@${1}:${2} ~/Downloads/ && open ~/Downloads/$(basename ${2}) }
+
+# Update dotfiles.
+alias syncdot='cp ~/.zshrc ~/repos/dotfiles/home && cp ~/.vimrc ~/repos/dotfiles/home; cd ~/repos/dotfiles && gs'
