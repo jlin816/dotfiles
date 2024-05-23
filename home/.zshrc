@@ -174,6 +174,34 @@ alias py='python3'
 # Upload/download files from server.
 function dl() { scp -r jessy@${1}:/home/jessy/projects/${2} ~/Downloads/ && open ~/Downloads/$(basename ${2}) }
 function dlf() { scp -r jessy@${1}:${2} ~/Downloads/ && open ~/Downloads/$(basename ${2}) }
+function ul() { scp -r ${1} jessy@${2}:/home/jessy/projects/${3} }
+function port() { ssh -NfL localhost:${1}:nlp4:nlp4 }
 
 # Update dotfiles.
 alias syncdot='cp ~/.zshrc ~/repos/dotfiles/home && cp ~/.vimrc ~/repos/dotfiles/home; cd ~/repos/dotfiles && gs'
+
+# Color ls output.
+alias ls='ls --color=auto'
+
+# Ruby version management with chruby.
+ if [[ -d /opt/homebrew/opt/chruby/share/chruby/ ]]; then
+  source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+  source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+  chruby ruby-3.1.3
+fi
+
+# Save websites offline
+# offlinesite https://example.com ~/example-site/
+function offlinesite() {
+  wget \
+  --recursive \
+  -l 10 \
+  --mirror \
+  --page-requisites \
+  --adjust-extension \
+  --convert-links \
+  --no-parent \
+  --domains "$1" \
+  -P $2 \
+  "$1"
+}

@@ -157,7 +157,6 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> <Leader>gi <plug>(lsp-implementation)
 endfunction
 
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Filetype settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
