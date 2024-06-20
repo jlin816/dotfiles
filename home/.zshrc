@@ -135,6 +135,10 @@ bindkey "[C" forward-word
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 bindkey "ç" fzf-cd-widget
+if type rg &> /dev/null; then
+  export FZF_DEFAULT_COMMAND='rg --files'
+  export FZF_CTRL_T_COMMAND='rg --files'
+fi
 
 # Terminal colors
 export CLICOLOR=1
@@ -175,7 +179,6 @@ alias py='python3'
 function dl() { scp -r jessy@${1}:/home/jessy/projects/${2} ~/Downloads/ && open ~/Downloads/$(basename ${2}) }
 function dlf() { scp -r jessy@${1}:${2} ~/Downloads/ && open ~/Downloads/$(basename ${2}) }
 function ul() { scp -r ${1} jessy@${2}:/home/jessy/projects/${3} }
-function port() { ssh -NfL localhost:${1}:nlp4:nlp4 }
 
 # Update dotfiles.
 alias syncdot='cp ~/.zshrc ~/repos/dotfiles/home && cp ~/.vimrc ~/repos/dotfiles/home; cd ~/repos/dotfiles && gs'

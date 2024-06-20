@@ -215,5 +215,17 @@ vnoremap <c-u> u
 nnoremap <silent> <c-c> :noh<cr>
 
 """"""
+" Project-specific indentation
+au BufRead,BufNewFile,BufEnter */dialop/* setlocal ts=4 sts=4 sw=4
+au BufRead,BufNewFile,BufEnter */*vid*/* setlocal ts=4 sts=4 sw=4
+
+" Override indentLine and show special characters in markdown
+let g:vim_json_syntax_conceal = 0
+" let g:vim_markdown_conceal = 0
+" let g:vim_markdown_conceal_code_blocks = 0
+let g:indentLine_concealcursor = "nc"
+
+" Remove trailing whitespace in Python
+autocmd BufWritePre *.py %s/\s\+$//e
 
 
