@@ -81,6 +81,20 @@ case $PKG_MANAGER in
         ;;
 esac
 
+# Install jq
+echo "Installing jq..."
+case $PKG_MANAGER in
+    apt)
+        sudo apt-get install -y jq
+        ;;
+    dnf|yum)
+        sudo $PKG_MANAGER install -y jq
+        ;;
+    brew)
+        brew install jq
+        ;;
+esac
+
 # Install Zsh
 echo "Installing Zsh..."
 case $PKG_MANAGER in
