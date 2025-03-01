@@ -1,0 +1,45 @@
+[window]
+decorations = "Buttonless"
+padding = { x = 8, y = 10 }
+dynamic_padding = false
+
+[colors.primary]
+background = "#1f232e"
+foreground = "#cbcbc6"
+
+[colors.cursor]
+text = "#383d4a"
+cursor = "#e3754d"
+
+[colors.selection]
+text = "#595f6f"
+background = "#2c3444"
+
+[colors.normal]
+black   = "#1a1d28"
+red     = "#e38c7d"
+green   = "#c2e48a"
+yellow  = "#f2f899"
+blue    = "#89cdfa"
+magenta = "#d0bffa"
+cyan    = "#a7e3cc"
+white   = "#c7c7c7"
+
+[colors.bright]
+black   = "#686868"
+red     = "#e38c7d"
+green   = "#c2e48a"
+yellow  = "#f6cd76"
+blue    = "#82aaff"
+magenta = "#d4aaff"
+cyan    = "#a0e6f0"
+white   = "#ffffff"
+
+[[colors.indexed_colors]]
+index = 16
+color = "#f78c6c"
+
+[[colors.indexed_colors]]
+index = 17
+color = "#ff5370"
+

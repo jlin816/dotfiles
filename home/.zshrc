@@ -128,9 +128,13 @@ zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower
 autoload -Uz compinit
 compinit
 
-# Move one word fwd or backward
+# Map option+left/right escape seqs to move one word backward or forward
+# iTerm2
 bindkey "[D" backward-word
 bindkey "[C" forward-word
+# Alacritty
+bindkey "^[[1;3D" backward-word
+bindkey "^[[1;3C" forward-word
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -187,7 +191,7 @@ alias syncdot='cp ~/.zshrc ~/repos/dotfiles/home && cp ~/.vimrc ~/repos/dotfiles
 alias ls='ls --color=auto'
 
 # Ruby version management with chruby.
- if [[ -d /opt/homebrew/opt/chruby/share/chruby/ ]]; then
+if [[ -d /opt/homebrew/opt/chruby/share/chruby/ ]]; then
   source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
   source /opt/homebrew/opt/chruby/share/chruby/auto.sh
   chruby ruby-3.1.3
