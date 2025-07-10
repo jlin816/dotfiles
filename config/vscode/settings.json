@@ -1,0 +1,96 @@
+{
+    "window.commandCenter": false,
+    "workbench.colorTheme": "Ayu Mirage Bordered",
+    "workbench.statusBar.visible": false,
+    // https://github.com/getcursor/cursor/issues/1570
+    "workbench.activityBar.orientation": "vertical",
+    "workbench.layoutControl.enabled": false,
+     // Disable icons in the tabs
+    "workbench.editor.showIcons": false,
+     // Removes the close tab button. Use Control + W instead.
+    "workbench.editor.tabCloseButton": "off",
+    "workbench.editor.tabActionCloseVisibility": false,
+    "workbench.activityBar.location": "hidden",
+
+    "explorer.openEditors.visible": 1,
+    "explorer.autoReveal": false,
+    // Disable file glyphs and numbers in the explorer and tabs
+    "workbench.iconTheme": null,
+    "explorer.decorations.badges": false,
+    "workbench.editor.decorations.badges": false,
+
+
+
+    // Editor settings
+    "editor.tabSize": 2,
+    "editor.padding.bottom": 8,
+    "editor.padding.top": 10,
+    "editor.lineNumbers": "on",
+    // Padding bw line numbers and code
+    "editor.lineDecorationsWidth": 9,
+    "editor.folding": false,
+    "editor.scrollbar.horizontal": "hidden",
+    "editor.scrollbar.vertical": "hidden",
+    "editor.codeLens": false,
+    // Disables the overview ruler.
+    "editor.overviewRulerBorder": false,
+    "editor.minimap.enabled": false,
+    // Some stuff about the overview rules
+    "editor.hideCursorInOverviewRuler": true,
+    "editor.overviewRulerLanes": 0,
+    //"editor.glyphMargin": false,
+    // Enables different color pools for different bracket types, for example {}, [], ()
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    // Enables smooth scrolling, a must have 
+    "editor.smoothScrolling": false,
+    // Indent when wrapping
+    "editor.wrappingIndent": "indent",
+    "breadcrumbs.enabled": false,
+    
+    // No top bar
+    "window.titleBarStyle": "custom",
+    
+    // No highlighting
+    "editor.occurrencesHighlight": "off",
+    "editor.selectionHighlight": false,
+
+    "workbench.colorCustomizations": {
+        "editorOverviewRuler.addedForeground": "#0000",
+        "editorOverviewRuler.modifiedForeground": "#0000",
+        "editorOverviewRuler.deletedForeground": "#0000",
+        "editorOverviewRuler.infoForeground": "#0000",
+        "editorOverviewRuler.warningForeground": "#0000",
+        "editorOverviewRuler.errorForeground": "#0000",
+        "editorOverviewRuler.bracketMatchForeground": "#0000",
+        "editorOverviewRuler.commentForeground": "#0000",
+        "editorOverviewRuler.commentUnresolvedForeground": "#0000",
+        "editorOverviewRuler.currentContentForeground": "#0000",
+        "editorOverviewRuler.commonContentForeground": "#0000",
+        "editorOverviewRuler.incomingContentForeground": "#0000",
+        "editorOverviewRuler.findMatchForeground": "#0000",
+        "editorOverviewRuler.rangeHighlightForeground": "#0000",
+        "editorOverviewRuler.selectionHighlightForeground": "#0000",
+        "editorOverviewRuler.wordHighlightForeground": "#0000",
+        "editorOverviewRuler.wordHighlightStrongForeground": "#0000",
+        "editorOverviewRuler.wordHighlightTextForeground": "#0000",
+        "editorCursor.foreground": "#ff3c00",
+        "terminalCursor.foreground": "#ff3c00",
+        "button.background":   "#ca7e1a",   // normal state
+    
+        // No git gutters
+        "editorGutter.addedBackground": "#000",
+        "editorGutter.deletedBackground": "#000",
+        "editorGutter.modifiedBackground": "#000",
+},
+
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "workbench.editor.enablePreview": false,
+    "window.density.editorTabHeight": "compact",
+    "editor.fontFamily": "Fira Code, Menlo, Monaco, 'Courier New', monospace",
+    
+    // Jupyter notebook settings
+    "notebook.output.wordWrap": true,
+    "terminal.integrated.inheritEnv": false,
+}
