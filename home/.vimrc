@@ -21,8 +21,10 @@ Plugin 'tpope/vim-surround'
 Plugin 'FooSoft/vim-argwrap'
 Plugin 'nelstrom/vim-visual-star-search'
 Plugin 'nvim-treesitter/nvim-treesitter-context'
+Plugin 'tpope/vim-eunuch'
 "" Commenting shortcuts
 Plugin 'preservim/nerdcommenter'
+Plugin 'tomtom/tcomment_vim'  " Dani's preference
 "" Indent vertical indicators
 Plugin 'Yggdroot/indentLine'
 " Filetypes
@@ -35,6 +37,7 @@ Plugin 'DingDean/wgsl.vim'
 " LSP
 Plugin 'prabirshrestha/vim-lsp'
 Plugin 'mattn/vim-lsp-settings'
+Plugin 'dense-analysis/ale'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -68,6 +71,8 @@ let ayucolor="dark"
 colorscheme ayu
 set background=dark
 let g:airline_theme='oceanicnext'
+
+
 " Enable mouse
 set mouse=a
 " Highlight and incrementally show %s results
@@ -157,6 +162,23 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> <Leader>gi <plug>(lsp-implementation)
 endfunction
 
+" Use pyright-langserver for Python and disable pylsp
+let g:lsp_settings_filetype_python = ['pyright-langserver']
+
+let g:lsp_settings = {
+\  'pylsp-all': { 'disabled': v:true },
+\  'pylsp':     { 'disabled': v:true },
+\  'pyright-langserver': {
+\    'allowlist': ['python'],
+\  },
+\}
+
+augroup lsp_install
+  au!
+  " call s:on_lsp_buffer_enabled only for buffers with an attached server
+  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Filetype settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -214,10 +236,22 @@ vnoremap <c-u> u
 " Hide highlights.
 nnoremap <silent> <c-c> :noh<cr>
 
+" Play macro.
+nnoremap <leader>q @q
+
+" Format paragraph or selection.
+nnoremap <leader>f gqap
+vnoremap <leader>f gq
+
+" Commenting.
+nmap <leader>k mzgcip`z
+vmap <leader>k gc
+
 """"""
 " Project-specific indentation
-au BufRead,BufNewFile,BufEnter */dialop/* setlocal ts=4 sts=4 sw=4
+au BufRead,BufNewFile,BufEnter */repos/dialop/* setlocal ts=4 sts=4 sw=4
 au BufRead,BufNewFile,BufEnter */*vid*/* setlocal ts=4 sts=4 sw=4
+au BufRead,BufNewFile,BufEnter */*engram*/* setlocal ts=4 sts=4 sw=4
 
 " Override indentLine and show special characters in markdown
 let g:vim_json_syntax_conceal = 0
@@ -228,4 +262,26 @@ let g:indentLine_concealcursor = "nc"
 " Remove trailing whitespace in Python
 autocmd BufWritePre *.py %s/\s\+$//e
 
+" Turn 4 indent file into 2 indent
+function! ConvertToTwoSpaces()
+  " Save the cursor position
+  let l:save_cursor = getpos(".")
+  " Convert 4 spaces to 2 spaces
+  %s;^\(\s\+\);\=repeat(' ', len(submatch(0))/2);g
+  " Convert tabs to 2 spaces
+  %s/\t/  /g
+  " Restore the cursor position
+  call setpos('.', l:save_cursor)
+endfunction
+" Map the function to <Leader>c2
+nnoremap <Leader>c2 :call ConvertToTwoSpaces()<CR>
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" VSCode / Cursor compatibility
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use floating windows for hover (instead of preview/split)
+" Otherwise VSC opens a new tab instead of popovers
+"let g:lsp_preview_float = 1
+"let g:lsp_float_max_width = 120
+"let g:lsp_float_max_height = 30
+"let g:lsp_preview_keep_focus = 0
