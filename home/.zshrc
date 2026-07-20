@@ -109,6 +109,10 @@ prompt pure
 
 
 # Plugins
+# Avoid zsh-autosuggestions rebinding widgets recursively.
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+export FUNCNEST=1000
+
 export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zdharma/fast-syntax-highlighting", as:plugin, defer:2
@@ -152,20 +156,24 @@ export TERM=xterm-256color
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/jessy/.miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$("$HOME/.miniconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/Users/jessy/.miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/jessy/.miniconda3/etc/profile.d/conda.sh"
+    if [ -f "$HOME/.miniconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/.miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/Users/jessy/.miniconda3/bin:$PATH"
+        export PATH="$HOME/.miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
 
 obsd=~/Documents/main
+
+#############################
+# Aliases
+#############################
 
 # Git.
 alias gs='git status'
@@ -176,6 +184,9 @@ alias gd='git diff HEAD'
 alias gdc='git diff --cached'
 function gr() { git rebase -i HEAD~$1 }
 
+# Utilities.
+alias up='cd ..'
+
 # Python.
 alias py='python3'
 
@@ -184,11 +195,34 @@ function dl() { scp -r jessy@${1}:/home/jessy/projects/${2} ~/Downloads/ && open
 function dlf() { scp -r jessy@${1}:${2} ~/Downloads/ && open ~/Downloads/$(basename ${2}) }
 function ul() { scp -r ${1} jessy@${2}:/home/jessy/projects/${3} }
 
-# Update dotfiles.
-alias syncdot='cp ~/.zshrc ~/repos/dotfiles/home && cp ~/.vimrc ~/repos/dotfiles/home; cd ~/repos/dotfiles && gs'
+# Dotfiles are linked by setup.sh, so synchronization only needs a status check.
+alias syncdot='git -C ~/repos/dotfiles status --short'
 
 # Color ls output.
 alias ls='ls --color=auto'
+
+# Ctrl-Y: choose a file with fzf and copy its path to the macOS clipboard.
+if command -v fzf >/dev/null && command -v pbcopy >/dev/null; then
+  fzf-copy-path() {
+    local item
+    item="$(
+      eval "$FZF_CTRL_T_COMMAND" 2>/dev/null | fzf --height=40% --border --layout=reverse
+    )" || return
+
+    printf '%s' "$item" | pbcopy
+    zle redisplay
+  }
+
+  zle -N fzf-copy-path
+  bindkey '^Y' fzf-copy-path
+
+  # Ctrl-Y also copies the selected command inside Ctrl-R history search.
+  export FZF_CTRL_R_OPTS="
+    --bind 'ctrl-y:execute-silent(
+      echo {} | awk \"{\$1=\"\"; sub(/^ /, \"\"); print}\" | pbcopy
+    )'
+  "
+fi
 
 # Ruby version management with chruby.
 if [[ -d /opt/homebrew/opt/chruby/share/chruby/ ]]; then
@@ -213,7 +247,12 @@ function offlinesite() {
   "$1"
 }
 
-# Symlink SSH_AUTH_SOCK so currently running tmux sessions have access to it.
-if [ -S "$SSH_AUTH_SOCK" ] && [ ! -h "$SSH_AUTH_SOCK" ]; then
-    ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+
+export PATH="$HOME/.opencode/bin:$HOME/.local/bin:$PATH"
+
+if [ -f "$HOME/.rem/env" ]; then
+  . "$HOME/.rem/env"
 fi

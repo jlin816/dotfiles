@@ -1,25 +1,63 @@
 // Place your key bindings in this file to override the defaults
 [
+    // Pane navigation — mirrors Ctrl+W+hjkl in vim / vim-tmux-navigator
+    // Ctrl+J: editor → terminal panel
     {
         "key": "ctrl+j",
-        "command": "workbench.action.navigateDown",
-        "when": "vim.mode != 'Insert'"
+        "command": "workbench.action.terminal.focus",
+        "when": "editorTextFocus && neovim.mode != 'insert'"
     },
     {
         "key": "ctrl+k",
-        "command": "workbench.action.navigateUp",
-        "when": "vim.mode != 'Insert'"
+        "command": "workbench.action.focusAboveGroup",
+        "when": "editorTextFocus && neovim.mode != 'insert'"
     },
     {
         "key": "ctrl+h",
-        "command": "workbench.action.navigateLeft",
-        "when": "vim.mode != 'Insert'"
+        "command": "workbench.action.focusLeftGroup",
+        "when": "editorTextFocus && neovim.mode != 'insert'"
     },
     {
         "key": "ctrl+l",
-        "command": "workbench.action.navigateRight",
-        "when": "vim.mode != 'Insert'"
+        "command": "workbench.action.focusRightGroup",
+        "when": "editorTextFocus && neovim.mode != 'insert'"
     },
+    // Terminal → editor
+    {
+        "key": "ctrl+k",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+h",
+        "command": "workbench.action.focusLeftGroup",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+l",
+        "command": "workbench.action.focusRightGroup",
+        "when": "terminalFocus"
+    },
+    // Alt+Arrow navigation — mirrors tmux Alt+arrow pane switching
+    {
+        "key": "alt+left",
+        "command": "workbench.action.focusLeftGroup"
+    },
+    {
+        "key": "alt+right",
+        "command": "workbench.action.focusRightGroup"
+    },
+    {
+        "key": "alt+up",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "alt+down",
+        "command": "workbench.action.terminal.focus",
+        "when": "editorTextFocus"
+    },
+    // Tab cycling
     {
         "key": "ctrl+tab",
         "command": "workbench.action.nextEditor"
@@ -38,60 +76,52 @@
         "command": "workbench.action.terminal.focusPrevious",
         "when": "terminalFocus"
     },
+    // Neovim scroll pass-through (Ctrl+U/D/F/B)
     {
-        "key": "ctrl+pagedown",
-        "command": "-extension.vim_ctrl+pagedown",
-        "when": "editorTextFocus && vim.active && vim.use<C-pagedown> && !inDebugRepl"
+        "command": "vscode-neovim.send",
+        "key": "ctrl+u",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
+        "args": "<C-u>"
     },
     {
-        "key": "ctrl+pageup",
-        "command": "-extension.vim_ctrl+pageup",
-        "when": "editorTextFocus && vim.active && vim.use<C-pageup> && !inDebugRepl"
+        "command": "vscode-neovim.send",
+        "key": "ctrl+d",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
+        "args": "<C-d>"
     },
     {
-		"command": "vscode-neovim.send",
-		"key": "ctrl+u",
-		"when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
-		"args": "<C-u>"
-	},
-	{
-		"command": "vscode-neovim.send",
-		"key": "ctrl+d",
-		"when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
-		"args": "<C-d>"
-	},
-	{
-		"command": "vscode-neovim.send",
-		"key": "ctrl+f",
-		"when": "editorTextFocus && neovim.ctrlKeysNormal.f && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
-		"args": "<C-f>"
-	},
-	{
-		"command": "vscode-neovim.send",
-		"key": "ctrl+b",
-		"when": "editorTextFocus && neovim.ctrlKeysNormal.b && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
-		"args": "<C-b>"
-	},
-	{
-		"key": "ctrl+d",
-		"command": "-vscode-neovim.ctrl-d",
-		"when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
-	},
-	{
-		"key": "ctrl+u",
-		"command": "-vscode-neovim.ctrl-u",
-		"when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
-	},
-	{
-		"key": "ctrl+b",
-		"command": "-vscode-neovim.ctrl-b",
-		"when": "editorTextFocus && neovim.ctrlKeysNormal.b && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
-	},
-	{
-		"key": "ctrl+f",
-		"command": "-vscode-neovim.ctrl-f",
-		"when": "editorTextFocus && neovim.ctrlKeysNormal.f && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
-	},
+        "command": "vscode-neovim.send",
+        "key": "ctrl+f",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.f && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
+        "args": "<C-f>"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "ctrl+b",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.b && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
+        "args": "<C-b>"
+    },
+    {
+        "key": "ctrl+d",
+        "command": "-vscode-neovim.ctrl-d",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+    },
+    {
+        "key": "ctrl+u",
+        "command": "-vscode-neovim.ctrl-u",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+    },
+    {
+        "key": "ctrl+b",
+        "command": "-vscode-neovim.ctrl-b",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.b && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+    },
+    {
+        "key": "ctrl+f",
+        "command": "-vscode-neovim.ctrl-f",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.f && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+    },
+    // Ctrl+P: suppress default list/suggestion navigation so quick open works cleanly
     {
         "key": "ctrl+alt+p",
         "command": "-list.focusAnyUp",
@@ -117,24 +147,23 @@
         "command": "-selectPrevSuggestion",
         "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
     },
+    // Shift+Tab: toggle Explorer (like NERDTree)
     {
         "key": "shift+tab",
         "command": "workbench.view.explorer",
         "when": "viewContainer.workbench.view.explorer.enabled"
     },
+    // Ctrl+C: clear search results
     {
         "key": "ctrl+c",
-        "command": "extension.multiCommand.execute",
-        "args": {
-            "sequence": [
-                "search.action.clearSearchResults",
-                "search.action.collapseSearchResults",
-                "search.action.cancel"
-            ]
-        },
-        "when": "editorTextFocus && hasSearchResult"
+        "command": "search.action.cancel",
+        "when": "listFocus && searchViewletVisible && !inputFocus && !treestickyScrollFocused && searchState != '0'"
     },
-    
+    {
+        "key": "escape",
+        "command": "-search.action.cancel",
+        "when": "listFocus && searchViewletVisible && !inputFocus && !treestickyScrollFocused && searchState != '0'"
+    },
     // Jupyter
     {
         "key": "ctrl+m a",
@@ -155,19 +184,5 @@
         "key": "ctrl+; b",
         "command": "-jupyter.insertCellBelow",
         "when": "editorTextFocus && jupyter.hascodecells && !jupyter.webExtension && !notebookEditorFocused"
-    },
-    {
-        "key": "ctrl+c",
-        "command": "search.action.cancel",
-        "when": "listFocus && searchViewletVisible && !inputFocus && !treestickyScrollFocused && searchState != '0'"
-    },
-    {
-        "key": "escape",
-        "command": "-search.action.cancel",
-        "when": "listFocus && searchViewletVisible && !inputFocus && !treestickyScrollFocused && searchState != '0'"
-    },
-    {
-        "key": "cmd+i",
-        "command": "composerMode.agent"
-    },
+    }
 ]

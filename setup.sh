@@ -111,6 +111,59 @@ esac
 
 # Install Oh My Zsh
 echo "Installing Oh My Zsh..."
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+    RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+DOTFILES_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+BACKUP_SUFFIX="backup.$(date +%Y%m%d%H%M%S)"
+
+link_file() {
+    local source=$1
+    local target=$2
+
+    mkdir -p "$(dirname "$target")"
+
+    if [[ -L "$target" ]] && [[ "$(readlink "$target")" == "$source" ]]; then
+        return
+    fi
+
+    if [[ -e "$target" || -L "$target" ]]; then
+        mv "$target" "${target}.${BACKUP_SUFFIX}"
+    fi
+
+    ln -s "$source" "$target"
+}
+
+echo "Linking dotfiles..."
+link_file "$DOTFILES_DIR/home/.zshrc" "$HOME/.zshrc"
+link_file "$DOTFILES_DIR/home/.zprofile" "$HOME/.zprofile"
+link_file "$DOTFILES_DIR/home/.vimrc" "$HOME/.vimrc"
+link_file "$DOTFILES_DIR/home/.tmux.conf" "$HOME/.tmux.conf"
+link_file "$DOTFILES_DIR/home/.gitignore-global" "$HOME/.gitignore-global"
+link_file "$DOTFILES_DIR/config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
+link_file "$DOTFILES_DIR/config/aerospace/aerospace.toml" "$HOME/.config/aerospace/aerospace.toml"
+link_file "$DOTFILES_DIR/config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+link_file "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
+
+case "$(uname -s)" in
+    Darwin)
+        CODE_USER_DIR="$HOME/Library/Application Support/Code/User"
+        CURSOR_USER_DIR="$HOME/Library/Application Support/Cursor/User"
+        ;;
+    Linux)
+        CODE_USER_DIR="$HOME/.config/Code/User"
+        CURSOR_USER_DIR="$HOME/.config/Cursor/User"
+        ;;
+esac
+
+if [[ -n "${CODE_USER_DIR:-}" ]]; then
+    link_file "$DOTFILES_DIR/config/vscode/settings.json" "$CODE_USER_DIR/settings.json"
+    link_file "$DOTFILES_DIR/config/vscode/keybindings.json" "$CODE_USER_DIR/keybindings.json"
+    link_file "$DOTFILES_DIR/config/cursor/settings.json" "$CURSOR_USER_DIR/settings.json"
+    link_file "$DOTFILES_DIR/config/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.json"
+fi
+
+git config --global core.excludesfile "$HOME/.gitignore-global"
 
 echo "Installation complete!"

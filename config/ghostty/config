@@ -1,0 +1,47 @@
+# Codex renders tool output with the ANSI faint attribute. Keep assistant prose
+# prominent while preserving readable tool details.
+foreground = #E8E4DA
+faint-opacity = 0.38
+
+# jmux row shortcuts. Remove Ghostty's native Cmd-number accelerators before
+# forwarding those keys to tmux.
+keybind = super+0=unbind
+keybind = super+1=unbind
+keybind = super+2=unbind
+keybind = super+3=unbind
+keybind = super+4=unbind
+keybind = super+5=unbind
+keybind = super+6=unbind
+keybind = super+7=unbind
+keybind = super+8=unbind
+keybind = super+9=unbind
+keybind = super+digit_0=unbind
+keybind = super+digit_1=unbind
+keybind = super+digit_2=unbind
+keybind = super+digit_3=unbind
+keybind = super+digit_4=unbind
+keybind = super+digit_5=unbind
+keybind = super+digit_6=unbind
+keybind = super+digit_7=unbind
+keybind = super+digit_8=unbind
+keybind = super+digit_9=unbind
+keybind = performable:super+0=esc:0
+keybind = performable:super+1=esc:1
+keybind = performable:super+2=esc:2
+keybind = performable:super+3=esc:3
+keybind = performable:super+4=esc:4
+keybind = performable:super+5=esc:5
+keybind = performable:super+6=esc:6
+keybind = performable:super+7=esc:7
+keybind = performable:super+8=esc:8
+keybind = performable:super+9=esc:9
+keybind = performable:super+digit_0=esc:0
+keybind = performable:super+digit_1=esc:1
+keybind = performable:super+digit_2=esc:2
+keybind = performable:super+digit_3=esc:3
+keybind = performable:super+digit_4=esc:4
+keybind = performable:super+digit_5=esc:5
+keybind = performable:super+digit_6=esc:6
+keybind = performable:super+digit_7=esc:7
+keybind = performable:super+digit_8=esc:8
+keybind = performable:super+digit_9=esc:9

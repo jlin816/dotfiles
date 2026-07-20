@@ -115,9 +115,6 @@ map ,p oimport pdb; pdb.set_trace()<ESC>:w<cr>
 " Look for tags recursively
 set tags=tags;/
 
-" Remove trailing whitespace on save for most file types.
-autocmd BufWritePre * %s/\s\+$//e
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -138,13 +135,12 @@ let $FZF_DEFAULT_COMMAND="rg --files --hidden -g '!{.git,node_modules,__pycache_
 nnoremap <C-P> :Files<cr>
 nnoremap <C-F> :Rg<cr>
 
-" dense-analysis/ale - unused
+" dense-analysis/ale handles Ruff; vim-lsp owns Pyright below.
 let g:ale_linters = {'python': ['ruff']}
-let b:ale_fixers = ['isort', 'pycln', 'remove_trailing_lines', 'trim-whitespace']
-let g:ale_python_ruff_options = '--preview --ignore E111,E114,E731,E402'
-" Avoid slow search for virtual envs.
-let g:ale_use_global_executables = 1
-let g:ale_virtualenv_dir_names=[]
+let g:ale_fixers = {'python': ['ruff', 'isort', 'pycln']}
+" Run Python tools through the project's uv environment when available.
+let g:ale_python_auto_uv = 1
+let g:ale_use_global_executables = 0
 " Disable automatic linting.
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
@@ -154,6 +150,7 @@ let g:ale_virtualtext_cursor=0
 
 " prabirshrestha/vim-lsp
 let g:lsp_diagnostics_enabled = 0
+let g:lsp_diagnostics_echo_cursor = 1
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
@@ -258,9 +255,6 @@ let g:vim_json_syntax_conceal = 0
 " let g:vim_markdown_conceal = 0
 " let g:vim_markdown_conceal_code_blocks = 0
 let g:indentLine_concealcursor = "nc"
-
-" Remove trailing whitespace in Python
-autocmd BufWritePre *.py %s/\s\+$//e
 
 " Turn 4 indent file into 2 indent
 function! ConvertToTwoSpaces()
